@@ -18,4 +18,9 @@ public class Items {
 		}
 		return true;
 	}
+	
+	
+	public Item getItem(int barCode) {
+		return items.get(barCode);
+	}
 }
