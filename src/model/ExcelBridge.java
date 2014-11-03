@@ -19,46 +19,95 @@ public class ExcelBridge {
     
     private boolean endOfColumns = false;
     
-    public Items items = new Items();
+    public Items items;
+    public Users users;
 	
-	public ExcelBridge (String file) throws BiffException{
+	public ExcelBridge () throws BiffException{
 		
-	  Workbook workbook;
-	  try {
-		workbook = Workbook.getWorkbook(new File("Test.ods"));
 
-		Sheet sheet = workbook.getSheet(0);
-		  
-		for(int i=0; i< sheet.getColumn(FIRST_COLUMN).length; i++){
-//			String output = "Row: " + (i+1) + " ";
-//			System.out.println(output);
-			Cell cell1 = sheet.getCell(FIRST_COLUMN, i);
-			Cell cell2 = sheet.getCell(SECOND_COLUMN, i);
-			Cell cell3 = sheet.getCell(THIRD_COLUMN, i);
-			
-			if(endOfColumns){
-				continue;
-			}
-			
-			Item item = new Item(new Integer(cell1.getContents()), (cell2.getContents()), 
-					  new Integer(cell3.getContents()));
-			items.addItem(item);
-			//		          output += cell1.getContents() + " " + cell2.getContents();
-		    System.out.println(item.print());
-		}
-		workbook.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("Couldn't find file");
-		}
-		catch (java.lang.NumberFormatException e) {
-			endOfColumns = true;
-		}
-		
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 	
+	
+	public void run() throws BiffException {
+		buildItems();
+		buildUser();
+	}
+	
+	
+	private void buildItems() throws BiffException {
+		items = new Items();
+		
+		
+		  Workbook workbook;
+		  try {
+			workbook = Workbook.getWorkbook(new File("items.ods"));			
+			Sheet sheet = workbook.getSheet(0);
+			  
+			for(int i=0; i< sheet.getColumn(FIRST_COLUMN).length; i++){
+				Cell cell1 = sheet.getCell(FIRST_COLUMN, i);
+				Cell cell2 = sheet.getCell(SECOND_COLUMN, i);
+				Cell cell3 = sheet.getCell(THIRD_COLUMN, i);
+				
+				if(endOfColumns){
+					continue;
+				}
+				
+				Item item = new Item(new Integer(cell1.getContents()), (cell2.getContents()), 
+						  new Integer(cell3.getContents()));
+				items.addItem(item);
+			    System.out.println(item.print());
+			}
+			workbook.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("Couldn't find file");
+			}
+			catch (java.lang.NumberFormatException e) {
+				endOfColumns = true;
+			}
+			
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+	}
+
+	private void buildUser() throws BiffException {
+		users = new Users();
+		
+		
+		  Workbook workbook;
+		  try {
+			workbook = Workbook.getWorkbook(new File("users.ods"));			
+			Sheet sheet = workbook.getSheet(0);
+			  
+			for(int i=0; i< sheet.getColumn(FIRST_COLUMN).length; i++){
+				Cell cell1 = sheet.getCell(FIRST_COLUMN, i);
+				Cell cell2 = sheet.getCell(SECOND_COLUMN, i);
+				Cell cell3 = sheet.getCell(THIRD_COLUMN, i);
+				
+				if(endOfColumns){
+					continue;
+				}
+				
+				User item = new User(new Integer(cell1.getContents()), (cell2.getContents()), 
+						  new Integer(cell3.getContents()));
+				users.addUser(item);
+			    System.out.println(item.print());
+			}
+			workbook.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("Couldn't find file");
+			}
+			catch (java.lang.NumberFormatException e) {
+				endOfColumns = true;
+			}
+			
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+	}
+
+
 }

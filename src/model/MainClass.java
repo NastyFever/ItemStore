@@ -25,13 +25,14 @@ public class MainClass {
     static State state = State.ITEM_INPUT;
     
     static Item item;
+    static User user;
     
     public static void main(String[] args) 
 		      throws BiffException, IOException, WriteException
 	   {
 		   System.out.println("Starting testing");
 	
-		   ExcelBridge eBridge = new ExcelBridge("");
+		   ExcelBridge eBridge = new ExcelBridge();
 		   
 		   
 		   while(true) {
@@ -40,12 +41,20 @@ public class MainClass {
 			   String barCodeS = user_input.next();
 			   int barCode = Integer.parseInt(barCodeS);
 			   
+			   eBridge.run();
+			   
 			   if(state.equals(State.ITEM_INPUT)) {
 				   item = eBridge.items.getItem(barCode);
 				   if(item!=null){
 					   System.out.println("HA! Vill du köpa en " + item.print());
 					   state = State.USER_INPUT;
 				   }
+			   } else if (state.equals(State.USER_INPUT)){
+				   user = eBridge.users.getUser(barCode);
+				   if(user!=null){
+					   System.out.println("Skriver upp en" + item.print() + "på" + user.print() );
+					   state = State.ITEM_INPUT;
+				   }			   
 			   }
 		   }
 		   
