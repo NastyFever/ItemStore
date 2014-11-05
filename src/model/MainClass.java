@@ -1,5 +1,8 @@
 package model;
 
+import gui.BuyPanel;
+import gui.MainFrame;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -20,45 +23,103 @@ public class MainClass {
     final static int FIRST_COLUMN = 0;
     final static int SECOND_COLUMN = 1;
 
-    public enum State {ITEM_INPUT, USER_INPUT};
-    
-    static State state = State.ITEM_INPUT;
+    ExcelBridge eBridge;
+    StateHandler stateHandler = new StateHandler();
+    BuyHandler bh;
+
     
     static Item item;
     static User user;
+    
+    public MainClass(){
+    	try {
+			eBridge = new ExcelBridge();
+			bh = new BuyHandler(eBridge);
+		} catch (BiffException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
     
     public static void main(String[] args) 
 		      throws BiffException, IOException, WriteException
 	   {
 		   System.out.println("Starting testing");
-	
-		   ExcelBridge eBridge = new ExcelBridge();
+		   final MainClass model = new MainClass();
+		   final MainFrame mainFrame;
+	       try {
+	            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+	                if ("Nimbus".equals(info.getName())) {
+	                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+	                    break;
+	                }
+	            }
+	        } catch (ClassNotFoundException ex) {
+	            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (InstantiationException ex) {
+	            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (IllegalAccessException ex) {
+	            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+	            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        }
+	        //</editor-fold>
+
+	        /* Create and display the form */
+	        java.awt.EventQueue.invokeLater(new Runnable() {
+	            public void run() {
+	                MainFrame frame = new MainFrame(model);
+	                frame.setVisible(true);
+	                frame.setAlwaysOnTop(true);
+	            }
+	        });
+		   
 		   
 		   
 		   while(true) {
-			   Scanner user_input = new Scanner(System.in);
-			   
-			   String barCodeS = user_input.next();
-			   int barCode = Integer.parseInt(barCodeS);
-			   
-			   eBridge.run();
-			   
-			   if(state.equals(State.ITEM_INPUT)) {
-				   item = eBridge.items.getItem(barCode);
-				   if(item!=null){
-					   System.out.println("HA! Vill du köpa en " + item.print());
-					   state = State.USER_INPUT;
-				   }
-			   } else if (state.equals(State.USER_INPUT)){
-				   user = eBridge.users.getUser(barCode);
-				   if(user!=null){
-					   System.out.println("Skriver upp en" + item.print() + "på" + user.print() );
-					   state = State.ITEM_INPUT;
-				   }			   
-			   }
+			   model.run();
 		   }
 		   
 	   }
+    
+    private void run(){
+	   Scanner user_input = new Scanner(System.in);
+	   
+	   String barCodeS = user_input.next();
+	   int barCode = Integer.parseInt(barCodeS);
+	   
+		eBridge.run();
+		for (Item item:	eBridge.items.items.values())
+			System.out.println(item.print());
+		for (User item:	eBridge.users.users.values())
+			System.out.println(item.print());
+	   
+	   if(stateHandler.isInStateItemInput()) {
+		   item = eBridge.items.getItem(barCode);
+		   if(item!=null){
+			   System.out.println("Lägger till " + item.print());
+			   bh.setItem(item);
+			   stateHandler.nextState();
+		   } else {
+			   System.out.println("Item: " + barCode + " does not exist");
+		   }
+		   
+	   } else if (stateHandler.isInStateUserInput()){
+		   user = eBridge.users.getUser(barCode);
+		   if(user!=null){
+			   System.out.println("Lägger till " + user.print() + "på" + user.print());
+			   bh.setUser(user);
+			   bh.doBuy();
+			   stateHandler.nextState();
+		   } else {
+			   System.out.println("User: " + barCode + " does not exist");
+		   }
+	   }    	
+    }
+    
+    public void setUpBuyHandler(BuyPanel bp){
+    	bh.setBuyPanel(bp);
+    }
    
    private static void testMethodReadSome() throws BiffException, IOException{
       Workbook workbook = Workbook.getWorkbook(new File("Test.ods"));

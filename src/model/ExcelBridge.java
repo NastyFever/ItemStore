@@ -9,6 +9,13 @@ import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
+import jxl.write.Label;
+import jxl.write.Number;
+import jxl.write.WritableCell;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
 
 
 public class ExcelBridge {
@@ -29,9 +36,15 @@ public class ExcelBridge {
 	}
 	
 	
-	public void run() throws BiffException {
-		buildItems();
-		buildUser();
+	public void run() {
+		endOfColumns = false;
+		try {
+			buildItems();
+			buildUser();
+		} catch (BiffException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -56,7 +69,7 @@ public class ExcelBridge {
 				Item item = new Item(new Integer(cell1.getContents()), (cell2.getContents()), 
 						  new Integer(cell3.getContents()));
 				items.addItem(item);
-			    System.out.println(item.print());
+//			    System.out.println(item.print());
 			}
 			workbook.close();
 			} catch (FileNotFoundException e) {
@@ -93,7 +106,7 @@ public class ExcelBridge {
 				User item = new User(new Integer(cell1.getContents()), (cell2.getContents()), 
 						  new Integer(cell3.getContents()));
 				users.addUser(item);
-			    System.out.println(item.print());
+//			    System.out.println(item.print());
 			}
 			workbook.close();
 			} catch (FileNotFoundException e) {
@@ -110,4 +123,59 @@ public class ExcelBridge {
 	}
 
 
+	public boolean updateDept(int newDept, int user) {
+		
+	    WritableWorkbook wworkbook;
+	    try {
+			wworkbook = Workbook.createWorkbook(new File("users.ods"));
+			WritableSheet wsheet = wworkbook.createSheet("First Sheet", 0);
+
+			
+			int rowID=-1;
+			for(int i=0; i< wsheet.getColumn(FIRST_COLUMN).length; i++){
+
+				Cell cell1 = wsheet.getCell(FIRST_COLUMN, i);
+				
+					
+				if(new Integer(cell1.getContents()) == user){
+					rowID = i;
+					continue;
+				} 
+			}
+
+			if (rowID==-1)
+				return false;
+
+			WritableCell cell = wsheet.getWritableCell(FIRST_COLUMN, rowID); 
+
+			
+			Number number = (Number) (cell);
+			number.setValue(newDept);
+//			wsheet.addCell(number);
+			
+//			wsheet.write();
+			wworkbook.write();
+			wworkbook.close();
+	    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (RowsExceededException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (WriteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		Sheet sheet = wworkbook.getSheet(0);
+
+	
+		return true;
+	}
+	      
+	      
+	      
+	      
+
+		
+		
 }
