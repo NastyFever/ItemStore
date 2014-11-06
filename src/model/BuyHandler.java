@@ -41,7 +41,7 @@ public class BuyHandler {
      * @return 
      */
     public boolean doBuy(){
-    	return eb.updateDept(user.dept + item.price, user.userId);
+    	return eb.updateDept(user.dept + item.price, user);
     }
     
     

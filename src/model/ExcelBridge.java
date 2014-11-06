@@ -104,7 +104,7 @@ public class ExcelBridge {
 				}
 				
 				User item = new User(new Integer(cell1.getContents()), (cell2.getContents()), 
-						  new Integer(cell3.getContents()));
+						  new Integer(cell3.getContents()), i);
 				users.addUser(item);
 //			    System.out.println(item.print());
 			}
@@ -122,47 +122,96 @@ public class ExcelBridge {
 			}		
 	}
 
+	
+	/**
+	 * Assumes that there exists a value User in User-file and that
+	 * that value hasn't changed row.
+	 * 
+	 * Might be a good idea to add a checker to this method.
+	 * 
+	 * @param newDept
+	 * @param user
+	 * @return
+	 */
 
-	public boolean updateDept(int newDept, int user) {
+	public boolean updateDept(int newDept, User user) {
 		
-	    WritableWorkbook wworkbook;
-	    try {
-			wworkbook = Workbook.createWorkbook(new File("users.ods"));
-			WritableSheet wsheet = wworkbook.createSheet("First Sheet", 0);
-
+		try{
+			Workbook workbook;
+			workbook = Workbook.getWorkbook(new File("users.ods"));
 			
-			int rowID=-1;
-			for(int i=0; i< wsheet.getColumn(FIRST_COLUMN).length; i++){
-
-				Cell cell1 = wsheet.getCell(FIRST_COLUMN, i);
+			WritableWorkbook copy = Workbook.createWorkbook(new File("temp.ods"), workbook);
+			
+			WritableSheet sheet1 = copy.getSheet(0); 
+//			WritableCell cell = sheet1.getWritableCell(FIRST_COLUMN, user.getRow()); 
+		
+		
+		
 				
-					
-				if(new Integer(cell1.getContents()) == user){
-					rowID = i;
-					continue;
-				} 
-			}
 
-			if (rowID==-1)
-				return false;
-
-			WritableCell cell = wsheet.getWritableCell(FIRST_COLUMN, rowID); 
-
+			Number number = new Number(THIRD_COLUMN, user.getRow(), newDept); 
+			sheet1.addCell(number);
 			
-			Number number = (Number) (cell);
-			number.setValue(newDept);
-//			wsheet.addCell(number);
+		
+		
+			copy.write(); 
+			copy.close();
+		
+		
+			workbook.close();
+		
+			workbook = Workbook.getWorkbook(new File("temp.ods"));
 			
-//			wsheet.write();
-			wworkbook.write();
-			wworkbook.close();
+			copy = Workbook.createWorkbook(new File("users.ods"), workbook);
+			
+			copy.write(); 
+			copy.close();
+
+			workbook.close();
+		
+		
+//	    WritableWorkbook wworkbook;
+//	    try {
+//			wworkbook = Workbook.createWorkbook(new File("users.ods"));
+//			WritableSheet wsheet = wworkbook.createSheet("First Sheet", 0);
+//
+//			
+//			int rowID=-1;
+//			for(int i=0; i< wsheet.getColumn(FIRST_COLUMN).length; i++){
+//
+//				Cell cell1 = wsheet.getCell(FIRST_COLUMN, i);
+//				
+//					
+//				if(new Integer(cell1.getContents()) == user){
+//					rowID = i;
+//					continue;
+//				} 
+//			}
+//
+//			if (rowID==-1)
+//				return false;
+//
+//			WritableCell cell = wsheet.getWritableCell(FIRST_COLUMN, rowID); 
+//
+//			
+//			Number number = (Number) (cell);
+//			number.setValue(newDept);
+////			wsheet.addCell(number);
+//			
+////			wsheet.write();
+//			wworkbook.write();
+//			wworkbook.close();
 	    } catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}catch (RowsExceededException e) {
+		}
+	    catch (RowsExceededException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (WriteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BiffException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -62,7 +62,7 @@
                       <Component id="itemLabel" linkSize="2" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="priceLabel" linkSize="2" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="50" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -96,14 +96,8 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="itemLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="infinite"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="priceLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="infinite"/>
-          </Properties>
         </Component>
       </SubComponents>
     </Container>
@@ -118,7 +112,7 @@
                       <Component id="userLabel" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="37" max="32767" attributes="0"/>
+                  <EmptySpace pref="51" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -129,7 +123,7 @@
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="userLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="38" max="32767" attributes="0"/>
+                  <EmptySpace pref="54" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -141,9 +135,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="userLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Not set"/>
-          </Properties>
         </Component>
       </SubComponents>
     </Container>
