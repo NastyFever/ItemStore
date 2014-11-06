@@ -66,7 +66,7 @@ public class ExcelBridge {
 					continue;
 				}
 				
-				Item item = new Item(new Integer(cell1.getContents()), (cell2.getContents()), 
+				Item item = new Item((cell1.getContents()), (cell2.getContents()), 
 						  new Integer(cell3.getContents()));
 				items.addItem(item);
 //			    System.out.println(item.print());
@@ -103,7 +103,7 @@ public class ExcelBridge {
 					continue;
 				}
 				
-				User item = new User(new Integer(cell1.getContents()), (cell2.getContents()), 
+				User item = new User(cell1.getContents(), (cell2.getContents()), 
 						  new Integer(cell3.getContents()), i);
 				users.addUser(item);
 //			    System.out.println(item.print());

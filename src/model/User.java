@@ -1,12 +1,12 @@
 package model;
 
 public class User {
-	public int userId;
+	public String userId;
 	public String name;
 	public int dept;
 	private int rowID;
 	
-	public User(int userId, String name, int dept, int rowID){
+	public User(String userId, String name, int dept, int rowID){
 		this.userId = userId;
 		this.name = name;
 		this.dept = dept;			

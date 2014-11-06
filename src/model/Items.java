@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 
 public class Items {
-	public HashMap<Integer, Item> items = new HashMap<Integer, Item>();
+	public HashMap<String, Item> items = new HashMap<String, Item>();
 	
 	public Items(){
 		
@@ -20,7 +20,7 @@ public class Items {
 	}
 	
 	
-	public Item getItem(int barCode) {
+	public Item getItem(String barCode) {
 		return items.get(barCode);
 	}
 }

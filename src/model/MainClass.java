@@ -3,6 +3,8 @@ package model;
 import gui.BuyPanel;
 import gui.MainFrame;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -31,6 +33,8 @@ public class MainClass {
     static Item item;
     static User user;
     
+    static MainFrame frame;
+    
     public MainClass(){
     	try {
 			eBridge = new ExcelBridge();
@@ -39,14 +43,9 @@ public class MainClass {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
-    
-    public static void main(String[] args) 
-		      throws BiffException, IOException, WriteException
-	   {
-		   System.out.println("Starting testing");
-		   final MainClass model = new MainClass();
-		   final MainFrame mainFrame;
+		
+		final MainClass me = this;
+		
 	       try {
 	            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 	                if ("Nimbus".equals(info.getName())) {
@@ -68,26 +67,60 @@ public class MainClass {
 	        /* Create and display the form */
 	        java.awt.EventQueue.invokeLater(new Runnable() {
 	            public void run() {
-	                MainFrame frame = new MainFrame(model);
+	                frame = new MainFrame(me);
 	                frame.setVisible(true);
 	                frame.setAlwaysOnTop(true);
+	                me.run(frame);
 	            }
 	        });
+    }
+    
+    public static void main(String[] args) 
+		      throws BiffException, IOException, WriteException
+	   {
+		   System.out.println("Starting testing");
+		   final MainClass model = new MainClass();
+
 		   
 		   
 		   
-		   while(true) {
-			   model.run();
-		   }
+//		   while(true) {
+//			   model.run();
+//		   }
 		   
 	   }
     
-    private void run(){
-	   Scanner user_input = new Scanner(System.in);
+    private void run(MainFrame frame){
+//	   Scanner user_input = new Scanner(System.in);
+    	
+    	
+    	frame.addKeyListener(new KeyAdapter() {
+    		String barCode="";
+    	    @Override
+    	    public void keyReleased(KeyEvent e) {
+	        	
+    	    	if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+    	            // your code is scanned and you can access it using frame.getBarCode()
+    	            // now clean the bar code so the next one can be read
+//    	            frame.setBarCode(new String());
+    	    		System.out.println(barCode);
+    	    		runBuyLogic(barCode);
+    	    		barCode = "";
+    	        } else {
+    	        	barCode += e.getKeyChar();
+    	            // some character has been read, append it to your "barcode cache"
+//    	            frame.setBarCode(frame.getBarCode() + e.getKeyChar());
+    	        }
+    	    }
+
+    	});
+//	   String barCodeS = user_input.next();
+//	   String barCode = barCodeS;
 	   
-	   String barCodeS = user_input.next();
-	   int barCode = Integer.parseInt(barCodeS);
-	   
+    	
+    }
+
+    private void runBuyLogic(String barCode){
 		eBridge.run();
 		for (Item item:	eBridge.items.items.values())
 			System.out.println(item.print());
@@ -114,13 +147,18 @@ public class MainClass {
 		   } else {
 			   System.out.println("User: " + barCode + " does not exist");
 		   }
-	   }    	
+	   }
     }
     
     public void setUpBuyHandler(BuyPanel bp){
     	bh.setBuyPanel(bp);
     }
-   
+
+    public void setUpStateHandler(BuyPanel bp){
+    	stateHandler.setBuyPanel(bp);
+    }
+
+    
    private static void testMethodReadSome() throws BiffException, IOException{
       Workbook workbook = Workbook.getWorkbook(new File("Test.ods"));
       Sheet sheet = workbook.getSheet(0);

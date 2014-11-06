@@ -34,8 +34,9 @@ public class StateHandler {
                         
                 }
 		else if(state.equals(State.USER_INPUT)){
+			buyPanel.setItem("","");
 			state = State.ITEM_INPUT;
-                }
+        }
 	}
 	
 	private void stateWasUpdated(){
@@ -44,6 +45,11 @@ public class StateHandler {
 
 	public boolean isInStateUserInput() {
 		return state.equals(State.USER_INPUT);
+	}
+
+	public void setBuyPanel(BuyPanel bp) {
+		// TODO Auto-generated method stub
+		this.buyPanel = bp;
 	}
 
 }

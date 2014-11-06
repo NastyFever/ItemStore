@@ -33,7 +33,7 @@ public class BuyHandler {
     
     public void setUser(User user){
     	this.user = user;
-        bp.setUser(user.name);
+        bp.setUser(user.name, item.name);
     }
     
     /**
