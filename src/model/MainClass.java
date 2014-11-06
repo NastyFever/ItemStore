@@ -32,7 +32,8 @@ public class MainClass {
     
     static Item item;
     static User user;
-    
+//	= this;
+
     static MainFrame frame;
     
     public MainClass(){
@@ -44,8 +45,19 @@ public class MainClass {
 			e.printStackTrace();
 		}
 		
-		final MainClass me = this;
+//		final MainClass me = this;
 		
+
+    }
+    
+    public static void main(String[] args) 
+		      throws BiffException, IOException, WriteException
+	   {
+		   System.out.println("Starting testing");
+		   final MainClass model = new MainClass();
+
+		   
+		   
 	       try {
 	            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 	                if ("Nimbus".equals(info.getName())) {
@@ -67,23 +79,12 @@ public class MainClass {
 	        /* Create and display the form */
 	        java.awt.EventQueue.invokeLater(new Runnable() {
 	            public void run() {
-	                frame = new MainFrame(me);
+	                frame = new MainFrame(model);
 	                frame.setVisible(true);
 	                frame.setAlwaysOnTop(true);
-	                me.run(frame);
+	                model.run(frame);
 	            }
 	        });
-    }
-    
-    public static void main(String[] args) 
-		      throws BiffException, IOException, WriteException
-	   {
-		   System.out.println("Starting testing");
-		   final MainClass model = new MainClass();
-
-		   
-		   
-		   
 //		   while(true) {
 //			   model.run();
 //		   }

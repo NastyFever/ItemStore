@@ -157,15 +157,15 @@ public class BuyPanel extends javax.swing.JPanel {
     }
     
     public void setUser(String name, String item){
-    	String format = "'kl ' HH:mm ' den ' d/M G yyyy";
+    	String format = "d/M G yyyy 'klockan' HH:mm";
     	SimpleDateFormat timeStamp = new SimpleDateFormat(format);
         
     	SimpleDateFormat weekDay = new SimpleDateFormat("E");
     	System.out.println(weekDay.format(new Date()));
     	if(weekDay.format(new Date()).equals("to")){
-        	commentsOnTime.setText("P� en TORSDAG???");
+        	commentsOnTime.setText("På en TORSDAG???");
     	}
-        buyField.setText(name +  " k�pte en " + item + " " + timeStamp.format(new Date()));
+        buyField.setText(timeStamp.format(new Date()) + ": " + name +  " köpte en " + item);
     }
     
 }
